@@ -1,0 +1,163 @@
+<header>
+    <h1>ADRESSBUCH</h1>
+    <div class="search-container">
+        <h3>Suche</h3>
+        <div class="search-bar">
+            <input type="text" id="search-input" [(ngModel)]="searchQuery" (keyup)="search()">
+            <button id="search-btn" (click)="search()"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+    </div>
+</header>
+
+<div class="table-container scroll">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 10%;">Kunden-Nr.</th>
+                <th style="width: 12%;">Name</th>
+                <th style="width: 20%;">Straße</th>
+                <th style="width: 8%;">PLZ</th>
+                <th style="width: 20%;">Stadt</th>
+                <th style="width: 10%;">Land</th>
+                <th style="width: 12%;">Optionen</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let address of filteredData" class="row">
+                <td>{{address.id}}</td>
+                <td>{{address.name || "null"}}</td>
+                <td>{{address.street || "null"}}</td>
+                <td>{{address.plz || "null"}}</td>
+                <td>{{address.city || "null"}}</td>
+                <td>{{address.country || "null"}}</td>
+                <td>
+                    <div class="table-btns">
+                        <button class="table-btn hidde-btn edit" (click)="editAddress(address)" title="Bearbeiten">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </button>
+                        <button class="table-btn" (click)="copyAddress(address)" title="Kopieren">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                        <button class="table-btn hidde-btn" (click)="openDel(address.id)" title="Löschen">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<button class="action-btn add" (click)="openAdd()">Neue Adresse hinzufügen</button>
+
+
+
+<div id="edit-modal" class="modal">
+    <div class="modal-container">
+        <span id="close-edit" class="close">&times;</span>
+        <h1 class="headline">Adresse bearbeiten</h1>
+        <div class="modal-main" *ngIf="currentEditAddress">
+            <div class="modal-input-container">
+                <input type="text" id="edit-name" class="modal-input" [(ngModel)]="currentEditAddress.name" name="" required="">
+                <label>Name</label>
+            </div>
+            <div class="modal-input-container">
+                <input type="text" id="edit-straße" class="modal-input" [(ngModel)]="currentEditAddress.street" name="" required="">
+                <label>Straße</label>
+            </div>
+            <div class="modal-input-container">
+                <input type="text" id="edit-plz" class="modal-input" [(ngModel)]="currentEditAddress.plz" name="" required="">
+                <label>Postleitzahl</label>
+            </div>
+            <div class="modal-input-container">
+                <input type="text" id="edit-stadt" class="modal-input" [(ngModel)]="currentEditAddress.city" name="" required="">
+                <label>Stadt</label>
+            </div>
+            <div class="modal-input-container">
+                <input type="text" id="edit-land" class="modal-input" [(ngModel)]="currentEditAddress.country" name="" required="">
+                <label>Land</label>
+            </div>
+        </div>
+        <button class="action-btn" (click)="saveEditAddress()">Änderung speichern</button>
+    </div>
+</div>
+
+<div id="delete-modal" class="modal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h1 class="headline">Adresse löschen?</h1>
+        </div>
+        <div class="modal-main">
+            <h3 class="del-main">Die Adresse wird entfernt.</h3>
+            <div class="modal-btn">
+                <button id="cancel-delete" class="cancel-btn">Abbruch</button>
+                <button class="delete-btn" (click)="deleteAddress()">Löschen</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="add-modal" class="modal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <span id="close-add" class="close">&times;</span>
+            <h1 class="headline">Adresse hinzufügen</h1>
+        </div>
+        <div class="modal-main">
+            <form>
+                <div class="modal-input-container">
+                    <input type="text" id="name" class="modal-input" name="" required="">
+                    <label>Name</label>
+                </div>
+                <div class="modal-input-container">
+                    <input type="text" id="straße" class="modal-input" name="" required="">
+                    <label>Straße</label>
+                </div>
+                <div class="modal-input-container">
+                    <input type="text" id="plz" class="modal-input" name="" required="">
+                    <label>Postleitzahl</label>
+                </div>
+                <div class="modal-input-container">
+                    <input type="text" id="stadt" class="modal-input" name="" required="">
+                    <label>Stadt</label>
+                </div>
+                <div class="modal-input-container">
+                    <input type="text" id="land" class="modal-input" name="" required="">
+                    <label>Land</label>
+                </div>
+                <button class="action-btn" (click)="addAddress()">Adresse hinzufügen</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="copy-modal" class="modal">
+    <div class="modal-container">
+        <span id="close-copy" class="close">&times;</span>
+        <h1 class="headline">Adresse neu anlegen</h1>
+        <div class="modal-main" *ngIf="currentEditAddress">
+            <div class="modal-input-container">
+                <input type="text" id="edit-name" class="modal-input" [(ngModel)]="currentEditAddress.name" name="" required="">
+                <label>Name</label>
+            </div>
+            <div class="modal-input-container">
+                <input type="text" id="edit-straße" class="modal-input" [(ngModel)]="currentEditAddress.street" name="" required="">
+                <label>Straße</label>
+            </div>
+            <div class="modal-input-container">
+                <input type="text" id="edit-plz" class="modal-input" [(ngModel)]="currentEditAddress.plz" name="" required="">
+                <label>Postleitzahl</label>
+            </div>
+            <div class="modal-input-container">
+                <input type="text" id="edit-stadt" class="modal-input" [(ngModel)]="currentEditAddress.city" name="" required="">
+                <label>Stadt</label>
+            </div>
+            <div class="modal-input-container">
+                <input type="text" id="edit-land" class="modal-input" [(ngModel)]="currentEditAddress.country" name="" required="">
+                <label>Land</label>
+            </div>
+        </div>
+        <button class="action-btn" (click)="addCopyAddress()">Adresse speichern</button>
+    </div>
+</div>
