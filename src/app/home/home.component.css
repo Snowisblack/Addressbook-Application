@@ -33,6 +33,17 @@ header {
     padding: 1rem;
     margin-bottom: 1rem;
 }
+/* this defines what will happen to the defined elements when the screen is <= 650px */
+@media (max-width: 650px){
+  /* changing flex direction of header elements so they show underneath */
+  header {
+    flex-direction: column;
+  }
+
+  .search-container {
+    margin-top: 10px;
+  }
+}
 
 .search-container {
     display: flex;
@@ -140,7 +151,9 @@ td {
     background-color: white;
     border: none;
     width: 25px;
-    margin-left: 1rem;
+    /* suits better then 1rem in my opinion
+    (can leave it at 1rem as well, but that will lead to a higher looking margin on smaller screens */
+    margin: 0 5%;
 }
 
 .table-btn i {
@@ -199,6 +212,8 @@ td {
     border: 1px solid #888;
     width: 40%;
     border-radius: 10px;
+    /* prevent a modal, that is too small to see anything in it */
+    min-width: 440px;
 }
 
 /* The Close Button */
